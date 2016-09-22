@@ -3,6 +3,8 @@
 #include<iostream>
 #include<cmath>
 
+enum Orientation {ZERO, POSITIVE, NEGATIVE, COLLINEAR};
+
 class CGLPoint {
 public:
 	double x;
@@ -29,6 +31,76 @@ public:
 	}
 };
 
+class CGLOrientation {
+public:
+	Orientation coplanar_orientation(CGLPoint &P, CGLPoint &Q, CGLPoint &R) {
+		double px = P.x;
+		double py = P.y;
+		double pz = P.z;
+		double qx = Q.x;
+		double qy = Q.y;
+		double qz = Q.z;
+		double rx = R.x;
+		double ry = R.y;
+		double rz = R.z;
+		Orientation oxy_pqr = orient_2d(px, py, qx, qy, rx, ry);
+		if (oxy_pqr != COLLINEAR)
+			return oxy_pqr;
+		Orientation oyz_pqr = orient_2d(py, pz, qy, qz, ry, rz);
+		if (oyz_pqr != COLLINEAR)
+			return oyz_pqr;
+		return orient_2d(px, pz, qx, qz, rx, rz);
+	};
+private:
+	Orientation orient_2d(double px, double py, double qx, double qy, double rx, double ry)
+	{
+		double pqx = qx - px;
+		double pqy = qy - py;
+		double prx = rx - px;
+		double pry = ry - py;
+
+		double det = pqx*pry - pqy*prx;
+		double maxx = abs(px);
+		double maxy = abs(py);
+		double aqx = abs(qx);
+		double aqy = abs(qy);
+		double arx = abs(rx);
+		double ary = abs(ry);
+
+		if (maxx < aqx) maxx = aqx;
+		if (maxx < arx) maxx = arx;
+		if (maxy < aqy) maxy = aqy;
+		if (maxy < ary) maxy = ary;
+		double eps = 3.55271e-15 * maxx * maxy;
+
+		if (det > eps)  return POSITIVE;
+		if (det < -eps) return NEGATIVE;
+		return ZERO;
+	}
+};
+
+class CGLBox {
+private:
+	double min_x, max_x;
+	double min_y, max_y;
+	double min_z, max_z;
+public:
+	CGLBox() {};
+	CGLBox(double x1, double x2, double y1, double y2, double z1, double z2)
+		:min_x(x1), max_x(x2), min_y(y1), max_y(y2), min_z(z1), max_z(z2) {};
+	~CGLBox() {};
+	bool is_box_intersect(CGLBox& B) {
+		if (B.max_x<min_x || B.min_x>max_x)
+			return false;
+		if (B.max_y<min_y || B.min_y>max_y)
+			return false;
+		if (B.max_z<min_z || B.min_z>max_z)
+			return false;
+		return true;
+	};
+};
+
+
 class CGLVector {
 private:
 	double x;
@@ -45,25 +117,19 @@ public:
 		:x(x), y(y), z(z) {};
 	~CGLVector() {};
 	bool is_parallel(CGLVector v) {
-		if ((x == 0 && v.x != 0) || (x != 0 && v.x == 0))
-			return false;
-		if ((y == 0 && v.y != 0) || (y != 0 && v.y == 0))
-			return false;
-		if ((z == 0 && v.z != 0) || (z != 0 && v.z == 0))
-			return false;
-		if (x == 0)
-			if (y == 0)
-				return true;
-			else
-				if (y*v.z == z*v.y)
-					return true;
-				else
-					return false;
+		if (dot(v)/(quad()*v.quad()) == 1)
+			return true;
 		else
-			if ((x*v.y == y*v.x) && (y*v.z == z*v.y))
-				return true;
-			else
-				return false;
+			return false;
+	};
+	double quad() {
+		return x*x + y*y + z*z;
+	};
+	CGLVector cross(CGLVector v) {
+		double i = y*v.z - z*v.y;
+		double j = -(x*v.z - z*v.x);
+		double k = x*v.y - y*v.x;
+		return CGLVector(i, j, k);
 	};
 	double dot(CGLVector v) {
 		return x*v.x + y*v.y + z*v.z;
@@ -79,6 +145,11 @@ public:
 	CGLSegment(const CGLPoint& v1, const CGLPoint& v2)
 		:p0(v1), p1(v2) {};
 	~CGLSegment() {};
+	CGLBox get_box() {
+		return CGLBox(std::fmin(p0.x, p1.x), std::fmax(p0.x, p1.x),
+			std::fmin(p0.y, p1.y), std::fmax(p0.y, p1.y),
+			std::fmin(p0.z, p1.z), std::fmax(p0.z, p1.z));
+	};
 	friend const std::istream& operator >> (std::istream& in, CGLSegment &S) {
 		CGLPoint p0, p1;
 		in >> p0;
@@ -124,27 +195,6 @@ public:
 	};
 	void print() {
 		std::cout << a << ' ' << b << ' ' << c << ' ' << d;
-	};
-};
-
-class CGLBox {
-private:
-	double min_x, max_x;
-	double min_y, max_y;
-	double min_z, max_z;
-public:
-	CGLBox() {};
-	CGLBox(double x1, double x2, double y1, double y2, double z1, double z2)
-		:min_x(x1), max_x(x2), min_y(y1), max_y(y2), min_z(z1), max_z(z2){};
-	~CGLBox() {};
-	bool is_box_intersect(CGLBox& B) {
-		if (B.max_x<min_x || B.min_x>max_x)
-			return false;
-		if (B.max_y<min_y || B.min_y>max_y)
-			return false;
-		if (B.max_z<min_z || B.min_z>max_z)
-			return false;
-		return true;
 	};
 };
 

@@ -8,6 +8,10 @@ enum Cross_type {no_intersect, v_v_point, v_e_point, e_e_point, f_v_point,
 struct Result {
 };
 
+bool is_segments_intersect(CGLPoint x1, CGLPoint x2, CGLPoint y1, CGLPoint y2);
+
+bool is_coplanar_tr_intersect(CGLTriangle &t1, CGLTriangle &t2);
+
 bool is_triangles_intersect(float* vertices1, float* vertices2, int index_v11, int index_v12, int index_v13,
 	int index_v21, int index_v22, int index_v23);
 

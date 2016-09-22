@@ -1,3 +1,5 @@
-﻿  intersection.cpp
+﻿  main.cpp
+c:\users\work\documents\visual studio 2015\projects\triangle_intersection\triangle_intersection\main.cpp(17): warning C4838: conversion from 'double' to 'float' requires a narrowing conversion
+c:\users\work\documents\visual studio 2015\projects\triangle_intersection\triangle_intersection\main.cpp(17): warning C4305: 'initializing': truncation from 'double' to 'float'
   Triangle_intersection.vcxproj -> C:\Users\Work\Documents\Visual Studio 2015\Projects\Triangle_intersection\Debug\Triangle_intersection.exe
   Triangle_intersection.vcxproj -> C:\Users\Work\Documents\Visual Studio 2015\Projects\Triangle_intersection\Debug\Triangle_intersection.pdb (Partial PDB)

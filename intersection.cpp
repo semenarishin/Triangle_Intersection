@@ -117,7 +117,9 @@ bool is_triangles_intersect(float* vertices1, float* vertices2, int index_v11, i
 			if (fmax(coef1, coef2) < coef3) return false;
 		return true;
 	}
-	else {};
+	else {
+		return is_coplanar_tr_intersect(t1, t2);
+	};
 	return false;
 };
 

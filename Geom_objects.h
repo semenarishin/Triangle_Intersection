@@ -80,11 +80,10 @@ private:
 };
 
 class CGLBox {
-private:
+public:
 	double min_x, max_x;
 	double min_y, max_y;
 	double min_z, max_z;
-public:
 	CGLBox() {};
 	CGLBox(double x1, double x2, double y1, double y2, double z1, double z2)
 		:min_x(x1), max_x(x2), min_y(y1), max_y(y2), min_z(z1), max_z(z2) {};

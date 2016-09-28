@@ -1,3 +1,4 @@
-﻿  main.cpp
+﻿  intersection.cpp
+c:\users\work\documents\visual studio 2015\projects\triangle_intersection\triangle_intersection\geom_objects.h(245): warning C4715: 'CGLTriangle::get_point': not all control paths return a value
   Triangle_intersection.vcxproj -> C:\Users\Work\Documents\Visual Studio 2015\Projects\Triangle_intersection\Debug\Triangle_intersection.exe
   Triangle_intersection.vcxproj -> C:\Users\Work\Documents\Visual Studio 2015\Projects\Triangle_intersection\Debug\Triangle_intersection.pdb (Partial PDB)

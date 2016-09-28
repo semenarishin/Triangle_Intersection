@@ -6,19 +6,47 @@
 enum Orientation {ZERO, POSITIVE, NEGATIVE, COLLINEAR};
 
 class CGLPoint {
-public:
+private:
 	double x;
 	double y;
 	double z;
+public:
 	CGLPoint() {};
 	CGLPoint(float x, float y, float z)
-		:x(x), y(y), z(z) {};
+		:x(x), y(y), z(z) {}
+	CGLPoint(double x, double y, double z){
+		this->x = x;
+		this->y = y;
+		this->z = z;
+		double eps = 3.55271e-15;
+		if (abs(x) < eps)
+			this->x = 0;
+		if (abs(y) < eps)
+			this->y = 0;
+		if (abs(z) < eps)
+			this->z = 0;
+	}
 	CGLPoint(float* f, int index) {
 		x = *(f + index);
 		y = *(f + index + 1);
 		z = *(f + index + 2);
 	};
-	~CGLPoint() {};
+	~CGLPoint() {}
+	double getx() {
+		return x;
+	}
+	double gety() {
+		return y;
+	}
+	double getz() {
+		return z;
+	}
+	bool is_same(CGLPoint p) {
+		double eps = 3.55271e-15;
+		if ((abs(x - p.getx()) < eps) && (abs(y - p.gety()) < eps) && (abs(z - p.getz()) < eps))
+			return true;
+		else return false;
+	}
 	friend const std::istream& operator >> (std::istream& in, CGLPoint& P) {
 	float x, y, z;
 	in >> x >> y >> z;
@@ -33,16 +61,16 @@ public:
 
 class CGLOrientation {
 public:
-	Orientation coplanar_orientation(CGLPoint &P, CGLPoint &Q, CGLPoint &R) {
-		double px = P.x;
-		double py = P.y;
-		double pz = P.z;
-		double qx = Q.x;
-		double qy = Q.y;
-		double qz = Q.z;
-		double rx = R.x;
-		double ry = R.y;
-		double rz = R.z;
+	Orientation coplanar_orientation(CGLPoint P, CGLPoint Q, CGLPoint R) {
+		double px = P.getx();
+		double py = P.gety();
+		double pz = P.getz();
+		double qx = Q.getx();
+		double qy = Q.gety();
+		double qz = Q.getz();
+		double rx = R.getx();
+		double ry = R.gety();
+		double rz = R.getz();
 		Orientation oxy_pqr = orient_2d(px, py, qx, qy, rx, ry);
 		if (oxy_pqr != COLLINEAR)
 			return oxy_pqr;
@@ -50,7 +78,7 @@ public:
 		if (oyz_pqr != COLLINEAR)
 			return oyz_pqr;
 		return orient_2d(px, pz, qx, qz, rx, rz);
-	};
+	}
 private:
 	Orientation orient_2d(double px, double py, double qx, double qy, double rx, double ry)
 	{
@@ -84,11 +112,11 @@ public:
 	double min_x, max_x;
 	double min_y, max_y;
 	double min_z, max_z;
-	CGLBox() {};
+	CGLBox() {}
 	CGLBox(double x1, double x2, double y1, double y2, double z1, double z2)
-		:min_x(x1), max_x(x2), min_y(y1), max_y(y2), min_z(z1), max_z(z2) {};
-	~CGLBox() {};
-	bool is_box_intersect(CGLBox& B) {
+		:min_x(x1), max_x(x2), min_y(y1), max_y(y2), min_z(z1), max_z(z2) {}
+	~CGLBox() {}
+	bool is_box_intersect(CGLBox B) {
 		if (B.max_x<min_x || B.min_x>max_x)
 			return false;
 		if (B.max_y<min_y || B.min_y>max_y)
@@ -96,7 +124,7 @@ public:
 		if (B.max_z<min_z || B.min_z>max_z)
 			return false;
 		return true;
-	};
+	}
 };
 
 
@@ -106,33 +134,42 @@ private:
 	double y;
 	double z;
 public:
-	CGLVector() {};
+	CGLVector() {}
 	CGLVector(CGLPoint p1, CGLPoint p2) {
-		x = p2.x - p1.x;
-		y = p2.y - p1.y;
-		z = p2.z - p1.z;
-	};
+		x = p2.getx() - p1.getx();
+		y = p2.gety() - p1.gety();
+		z = p2.getz() - p1.getz();
+	}
 	CGLVector(double x, double y, double z)
-		:x(x), y(y), z(z) {};
-	~CGLVector() {};
+		:x(x), y(y), z(z) {}
+	~CGLVector() {}
 	bool is_parallel(CGLVector v) {
-		if (dot(v)/(quad()*v.quad()) == 1)
+		if (dot(v)*dot(v)/(quad()*v.quad()) == 1)
 			return true;
 		else
 			return false;
-	};
+	}
 	double quad() {
 		return x*x + y*y + z*z;
-	};
+	}
+	double getx() {
+		return x;
+	}
+	double gety() {
+		return y;
+	}
+	double getz() {
+		return z;
+	}
 	CGLVector cross(CGLVector v) {
 		double i = y*v.z - z*v.y;
 		double j = -(x*v.z - z*v.x);
 		double k = x*v.y - y*v.x;
 		return CGLVector(i, j, k);
-	};
+	}
 	double dot(CGLVector v) {
 		return x*v.x + y*v.y + z*v.z;
-	};
+	}
 };
 
 class CGLSegment {
@@ -141,14 +178,14 @@ private:
 	CGLPoint p1;
 public:
 	CGLSegment() {};
-	CGLSegment(const CGLPoint& v1, const CGLPoint& v2)
-		:p0(v1), p1(v2) {};
-	~CGLSegment() {};
+	CGLSegment(const CGLPoint v1, const CGLPoint v2)
+		:p0(v1), p1(v2) {}
+	~CGLSegment() {}
 	CGLBox get_box() {
-		return CGLBox(std::fmin(p0.x, p1.x), std::fmax(p0.x, p1.x),
-			std::fmin(p0.y, p1.y), std::fmax(p0.y, p1.y),
-			std::fmin(p0.z, p1.z), std::fmax(p0.z, p1.z));
-	};
+		return CGLBox(std::fmin(p0.getx(), p1.getx()), std::fmax(p0.getx(), p1.getx()),
+			std::fmin(p0.gety(), p1.gety()), std::fmax(p0.gety(), p1.gety()),
+			std::fmin(p0.getz(), p1.getz()), std::fmax(p0.getz(), p1.getz()));
+	}
 	friend const std::istream& operator >> (std::istream& in, CGLSegment &S) {
 		CGLPoint p0, p1;
 		in >> p0;
@@ -170,19 +207,25 @@ public:
 	double c;
 	double d;
 	CGLPlane(CGLPoint p1, CGLPoint p2, CGLPoint p3) {
-		a = (p2.y - p1.y)*(p3.z - p1.z) - (p3.y - p1.y)*(p2.z - p1.z);
-		b = -(p2.x - p1.x)*(p3.z - p1.z) + (p3.x - p1.x)*(p2.z - p1.z);
-		c = (p2.x - p1.x)*(p3.y - p1.y) - (p3.x - p1.x)*(p2.y - p1.y);
-		d = -p1.x*a + p1.y*b - p1.z*c;
-	};
-	~CGLPlane() {};
+		CGLVector edge1(p1, p2);
+		CGLVector edge2(p1, p3);
+		CGLVector cr = edge1.cross(edge2);
+		a = cr.getx();
+		b = cr.gety();
+		c = cr.getz();
+		double a1 = (p2.gety() - p1.gety())*(p3.getz() - p1.getz()) - (p3.gety() - p1.gety())*(p2.getz() - p1.getz());
+		double b1 = -(p2.getx() - p1.getx())*(p3.getz() - p1.getz()) + (p3.getx() - p1.getx())*(p2.getz() - p1.getz());
+		double c1 = (p2.getx() - p1.getx())*(p3.gety() - p1.gety()) - (p3.getx() - p1.getx())*(p2.gety() - p1.gety());
+		d = -p1.getx()*a + p1.gety()*b - p1.getz()*c;
+	}
+	~CGLPlane() {}
 	CGLVector get_normal() {
 		return CGLVector(a, b, c);
-	};
+	}
 	bool is_parallel(CGLPlane p) {
 		CGLVector v(a, b, c);
 		return v.is_parallel(CGLVector(p.a, p.b, p.c));
-	};
+	}
 	bool is_equal(CGLPlane p) {
 		if (is_parallel(p))
 			if ((d == 0 && p.d != 0) || (d != 0 && p.d == 0))
@@ -191,10 +234,10 @@ public:
 				if ((a*p.d == d*p.a) || (b*p.d == d*p.b) || (c*p.d == d*p.c))
 					return true;
 		return false;				 
-	};
+	}
 	void print() {
 		std::cout << a << ' ' << b << ' ' << c << ' ' << d;
-	};
+	}
 };
 
 class CGLTriangle {
@@ -203,40 +246,40 @@ private:
 	CGLPoint p2;
 	CGLPoint p3;
 public:
-	CGLTriangle() {};
+	CGLTriangle() {}
 	CGLTriangle(CGLPoint v1, CGLPoint   v2, CGLPoint v3)
-		: p1(v1), p2(v2), p3(v3) {};
+		: p1(v1), p2(v2), p3(v3) {}
 	CGLTriangle(float* f, int index1, int index2, int index3) {
 		p1 = CGLPoint(f, index1);
 		p2 = CGLPoint(f, index2);
 		p3 = CGLPoint(f, index3);
-	};
-	~CGLTriangle() {};
+	}
+	~CGLTriangle() {}
 	CGLPoint get_point(int i) {  
-		switch (i) {
+		switch (i%3) {
+		case 0:
+			return p1;
 		case 1:
 			return p2;
 		case 2:
 			return p3;
-		default:
-			return p1;
 		}
-	};
+	}
 	bool is_degenerate() {
-		if (((p2.y - p1.y)*(p3.z - p1.z) - (p3.y - p1.y)*(p2.z - p1.z) == 0) &&
-			((p2.x - p1.x)*(p3.z - p1.z) - (p3.x - p1.x)*(p2.z - p1.z) == 0) &&
-			((p2.x - p1.x)*(p3.y - p1.y) - (p3.x - p1.x)*(p2.y - p1.y) == 0))
+		if (((p2.gety() - p1.gety())*(p3.getz() - p1.getz()) - (p3.gety() - p1.gety())*(p2.getz() - p1.getz()) == 0) &&
+			((p2.getx() - p1.getx())*(p3.getz() - p1.getz()) - (p3.getx() - p1.getx())*(p2.getz() - p1.getz()) == 0) &&
+			((p2.getx() - p1.getx())*(p3.gety() - p1.gety()) - (p3.getx() - p1.getx())*(p2.gety() - p1.gety()) == 0))
 			return true;
 		else return false;
-	};
+	}
 	CGLPlane get_plane() {
 		return CGLPlane(p1, p2, p3);
-	};
+	}
 	CGLBox get_box() {
-		return CGLBox(std::fmin(std::fmin(p1.x, p2.x), p3.x), std::fmax(std::fmax(p1.x, p2.x), p3.x),
-			std::fmin(std::fmin(p1.y, p2.y), p3.y), std::fmax(std::fmax(p1.y, p2.y), p3.y),
-			std::fmin(std::fmin(p1.z, p2.z), p3.z), std::fmax(std::fmax(p1.z, p2.z), p3.z));
-	};
+		return CGLBox(std::fmin(std::fmin(p1.getx(), p2.getx()), p3.getx()), std::fmax(std::fmax(p1.getx(), p2.getx()), p3.getx()),
+			std::fmin(std::fmin(p1.gety(), p2.gety()), p3.gety()), std::fmax(std::fmax(p1.gety(), p2.gety()), p3.gety()),
+			std::fmin(std::fmin(p1.getz(), p2.getz()), p3.getz()), std::fmax(std::fmax(p1.getz(), p2.getz()), p3.getz()));
+	}
 	friend const std::istream& operator >> (std::istream& in, CGLTriangle &T) {
 		CGLPoint p1, p2, p3;
 		in >> p1;

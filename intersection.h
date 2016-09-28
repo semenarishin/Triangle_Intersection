@@ -1,22 +1,53 @@
 #ifndef INTERSECTIONS_H
 #define INTERSECTIONS_H
 #include "geom_objects.h"
+#include <vector>
 
-enum Cross_type {no_intersect, v_v_point, v_e_point, e_e_point, f_v_point, 
-	e_e_seg, f_e_seg, f_f_seg, polygon };
+enum Cross_type {NO_INTERSECT, POINT, SEGMENT, POLYGON};
 
-struct Result {
+template<class T>
+class Result {
+private:
+		std::vector<T> res;
+public:
+	Result() {
+		res.clear();
+	}
+	Result(std::vector<T> v) {
+		res = v;
+	}
+	Result(CGLPoint p) {
+		res.push_back(p);
+	}
+	~Result() {}
+	void add(CGLPoint p) {
+		bool has = false;
+		for (int i = 0; i < res.size(); i++)
+			if (res[i].is_same(p))
+				has = true;
+		if(!has)
+			res.push_back(p);
+	}
+	void print() {
+		for (int i = 0; i < res.size(); i++)
+			std::cout << res[i];
+	}
 };
+bool is_collinear_seg_intersect(CGLPoint x1, CGLPoint x2, CGLPoint y1, CGLPoint y2);
 
 bool is_segments_intersect(CGLPoint x1, CGLPoint x2, CGLPoint y1, CGLPoint y2);
 
-bool is_coplanar_tr_intersect(CGLTriangle &t1, CGLTriangle &t2);
+bool collinear_seg_intersect(CGLPoint x1, CGLPoint x2, CGLPoint y1, CGLPoint y2, Result<CGLPoint>* res);
+
+bool segments_intersect(CGLPoint x1, CGLPoint x2, CGLPoint y1, CGLPoint y2, Result<CGLPoint>* res);
+
+bool is_coplanar_tr_intersect(CGLTriangle t1, CGLTriangle t2);
+
+bool coplanar_tr_intersect(CGLTriangle t1, CGLTriangle t2, Result<CGLPoint>* r);
 
 bool is_triangles_intersect(float* vertices1, float* vertices2, int index_v11, int index_v12, int index_v13,
 	int index_v21, int index_v22, int index_v23);
 
 bool triangles_intersection(float* vertices1, float* vertices2, int index_v11, int index_v12, int index_v13,
-	int index_v21, int index_v22, int index_v23, Cross_type* cr, Result* r);
-
-bool plane_plane_intersection(CGLPlane p1, CGLPlane p2);
+	int index_v21, int index_v22, int index_v23, Result<CGLPoint>* r);
 #endif

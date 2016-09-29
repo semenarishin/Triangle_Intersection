@@ -4,60 +4,118 @@
 double eps = 3.55271e-15;
 
 bool is_collinear_seg_intersect(CGLPoint x1, CGLPoint x2, CGLPoint y1, CGLPoint y2) {
-	if (x1.getx() > x2.getx()) {
-		CGLPoint p = x1;
-		x1 = x2;
-		x2 = p;
-	}
-	if (y1.getx() > y2.getx()) {
-		CGLPoint p = y1;
-		y1 = y2;
-		y2 = p;
-	}
-	if (x1.getx() != x2.getx()) {
-		if (x1.getx() > y2.getx())
-			return false;
-		if (x2.getx() < y1.getx())
-			return false;
-		if ((x1.getx() <= y1.getx()) && (x2.getx() >= y2.getx()))
-			return true;
-		if ((x1.getx() < y1.getx()) && (x2.getx() < y2.getx()) && (x2.getx() >= y1.getx()))
-			return true;
-		if ((x1.getx() > y1.getx()) && (x1.getx() <= y2.getx()) && (x2.getx() > y2.getx()))
-			return true;
-		if ((x1.getx() > y1.getx()) && (x2.getx() < y2.getx()))
-			return true;
-	}
-	else
-		if (x1.gety() != x2.gety()) {
-			if (x1.gety() > y2.gety())
+	if (x1 != x2) {
+		if (x1.getx() != x2.getx()) {
+			if (x1.getx() > x2.getx()) {
+				CGLPoint p = x1;
+				x1 = x2;
+				x2 = p;
+			}
+			if (y1.getx() > y2.getx()) {
+				CGLPoint p = y1;
+				y1 = y2;
+				y2 = p;
+			}
+			if (x1.getx() > y2.getx())
 				return false;
-			if (x2.gety() < y1.gety())
+			if (x2.getx() < y1.getx())
 				return false;
-			if ((x1.gety() <= y1.gety()) && (x2.gety() >= y2.gety()))
+			if ((x1.getx() <= y1.getx()) && (x2.getx() >= y2.getx()))
 				return true;
-			if ((x1.gety() < y1.gety()) && (x2.gety() < y2.gety()) && (x2.gety() >= y1.gety()))
+			if ((x1.getx() <= y1.getx()) && (x2.getx() < y2.getx()) && (x2.getx() >= y1.getx()))
 				return true;
-			if ((x1.gety() > y1.gety()) && (x1.gety() <= y2.gety()) && (x2.gety() > y2.gety()))
+			if ((x1.getx() > y1.getx()) && (x1.getx() <= y2.getx()) && (x2.getx() > y2.getx()))
 				return true;
-			if ((x1.gety() > y1.gety()) && (x2.gety() < y2.gety()))
+			if ((x1.getx() > y1.getx()) && (x2.getx() < y2.getx()))
 				return true;
 		}
-		else {
-			if (x1.getz() > y2.getz())
-				return false;
-			if (x2.getz() < y1.getz())
-				return false;
-			if ((x1.getz() <= y1.getz()) && (x2.getz() >= y2.getz()))
-				return true;
-			if ((x1.getz() < y1.getz()) && (x2.getz() < y2.getz()) && (x2.getz() >= y1.getz()))
-				return true;
-			if ((x1.getz() > y1.getz()) && (x1.getz() <= y2.getz()) && (x2.getz() > y2.getz()))
-				return true;
-			if ((x1.getz() > y1.getz()) && (x2.getz() < y2.getz()))
-				return true;
-		}
-		return false;
+		else
+			if (x1.gety() != x2.gety()) {
+				if (x1.gety() > x2.gety()) {
+					CGLPoint p = x1;
+					x1 = x2;
+					x2 = p;
+				}
+				if (y1.gety() > y2.gety()) {
+					CGLPoint p = y1;
+					y1 = y2;
+					y2 = p;
+				}
+				if (x1.gety() > y2.gety())
+					return false;
+				if (x2.gety() < y1.gety())
+					return false;
+				if ((x1.gety() <= y1.gety()) && (x2.gety() >= y2.gety()))
+					return true;
+				if ((x1.gety() < y1.gety()) && (x2.gety() < y2.gety()) && (x2.gety() >= y1.gety()))
+					return true;
+				if ((x1.gety() > y1.gety()) && (x1.gety() <= y2.gety()) && (x2.gety() > y2.gety()))
+					return true;
+					if ((x1.gety() > y1.gety()) && (x2.gety() < y2.gety())) {
+						return true;
+					}
+				}
+					else {
+						if (x1.getz() > x2.getz()) {
+							CGLPoint p = x1;
+							x1 = x2;
+							x2 = p;
+						}
+						if (y1.getz() > y2.getz()) {
+							CGLPoint p = y1;
+							y1 = y2;
+							y2 = p;
+						}
+						if (x1.getz() > y2.getz())
+							return false;
+						if (x2.getz() < y1.getz())
+							return false;
+						if ((x1.getz() <= y1.getz()) && (x2.getz() >= y2.getz()))
+							return true;
+						if ((x1.getz() < y1.getz()) && (x2.getz() < y2.getz()) && (x2.getz() >= y1.getz()))
+							return true;
+						if ((x1.getz() > y1.getz()) && (x1.getz() <= y2.getz()) && (x2.getz() > y2.getz()))
+							return true;
+						if ((x1.getz() > y1.getz()) && (x2.getz() < y2.getz()))
+							return true;
+					}
+				}
+				else if (y1 != y2) {
+					if (y1.getx() != y2.getx()) {
+						if (y1.getx() > y2.getx()) {
+							CGLPoint p = y1;
+							y1 = y2;
+							y2 = p;
+						}
+						if (x1.getx() <= y2.getx() && x1.getx() >= y1.getx())
+							return true;
+					}
+					else if (y1.gety() != y2.gety()) {
+						if (y1.gety() > y2.gety()) {
+							CGLPoint p = y1;
+							y1 = y2;
+							y2 = p;
+						}
+						if (x1.gety() <= y2.gety() && x1.gety() >= y1.gety())
+							return true;
+					}
+					else {
+						if (y1.getz() > y2.getz()) {
+							CGLPoint p = y1;
+							y1 = y2;
+							y2 = p;
+						}
+						if (x1.getz() <= y2.getz() && x1.getz() >= y1.getz())
+							return true;
+					}
+
+				}
+				else if (x1 != y1)
+					return false;
+				else {
+					return true;
+				}
+	return false;
 }
 
 bool is_segments_intersect(CGLPoint x1, CGLPoint x2, CGLPoint y1, CGLPoint y2) {
@@ -84,95 +142,162 @@ bool is_segments_intersect(CGLPoint x1, CGLPoint x2, CGLPoint y1, CGLPoint y2) {
 };
 
 bool collinear_seg_intersect(CGLPoint x1, CGLPoint x2, CGLPoint y1, CGLPoint y2, Result<CGLPoint>* res) {
-	if (x1.getx() > x2.getx()) {
-		CGLPoint p = x1;
-		x1 = x2;
-		x2 = p;
-	}
-	if (y1.getx() > y2.getx()) {
-		CGLPoint p = y1;
-		y1 = y2;
-		y2 = p;
-	}
-	if (x1.getx() != x2.getx()) {
-		if (x1.getx() > y2.getx())
-			return false;
-		if (x2.getx() < y1.getx())
-			return false;
-		if ((x1.getx() <= y1.getx()) && (x2.getx() >= y2.getx())) {
-			res->add(y1);
-			res->add(y2);
-			return true;
-		}
-		if ((x1.getx() < y1.getx()) && (x2.getx() < y2.getx()) && (x2.getx() >= y1.getx())) {
-			res->add(y1);
-			res->add(x2);
-			return true;
-		}
-		if ((x1.getx() > y1.getx()) && (x1.getx() <= y2.getx()) && (x2.getx() > y2.getx())) {
-			res->add(x1);
-			res->add(y2);
-			return true;
-		}
-		if ((x1.getx() > y1.getx()) && (x2.getx() < y2.getx())) {
-			res->add(x1);
-			res->add(x2);
-			return true;
-		}
-	}
-	else
-		if (x1.gety() != x2.gety()) {
-			if (x1.gety() > y2.gety())
+	if (x1 != x2) {
+		if (x1.getx() != x2.getx()) {
+			if (x1.getx() > x2.getx()) {
+				CGLPoint p = x1;
+				x1 = x2;
+				x2 = p;
+			}
+			if (y1.getx() > y2.getx()) {
+				CGLPoint p = y1;
+				y1 = y2;
+				y2 = p;
+			}
+			if (x1.getx() > y2.getx())
 				return false;
-			if (x2.gety() < y1.gety())
+			if (x2.getx() < y1.getx())
 				return false;
-			if ((x1.gety() <= y1.gety()) && (x2.gety() >= y2.gety())) {
+			if ((x1.getx() <= y1.getx()) && (x2.getx() >= y2.getx())) {
 				res->add(y1);
 				res->add(y2);
 				return true;
 			}
-			if ((x1.gety() < y1.gety()) && (x2.gety() < y2.gety()) && (x2.gety() >= y1.gety())) {
+			if ((x1.getx() <= y1.getx()) && (x2.getx() < y2.getx()) && (x2.getx() >= y1.getx())) {
 				res->add(y1);
 				res->add(x2);
 				return true;
 			}
-			if ((x1.gety() > y1.gety()) && (x1.gety() <= y2.gety()) && (x2.gety() > y2.gety())) {
+			if ((x1.getx() > y1.getx()) && (x1.getx() <= y2.getx()) && (x2.getx() > y2.getx())) {
 				res->add(x1);
 				res->add(y2);
 				return true;
 			}
-			if ((x1.gety() > y1.gety()) && (x2.gety() < y2.gety())) {
+			if ((x1.getx() > y1.getx()) && (x2.getx() < y2.getx())) {
 				res->add(x1);
 				res->add(x2);
+				return true;
+			}
+		}
+		else
+			if (x1.gety() != x2.gety()) {
+				if (x1.gety() > x2.gety()) {
+					CGLPoint p = x1;
+					x1 = x2;
+					x2 = p;
+				}
+				if (y1.gety() > y2.gety()) {
+					CGLPoint p = y1;
+					y1 = y2;
+					y2 = p;
+				}
+				if (x1.gety() > y2.gety())
+					return false;
+				if (x2.gety() < y1.gety())
+					return false;
+				if ((x1.gety() <= y1.gety()) && (x2.gety() >= y2.gety())) {
+					res->add(y1);
+					res->add(y2);
+					return true;
+				}
+				if ((x1.gety() < y1.gety()) && (x2.gety() < y2.gety()) && (x2.gety() >= y1.gety())) {
+					res->add(y1);
+					res->add(x2);
+					return true;
+				}
+				if ((x1.gety() > y1.gety()) && (x1.gety() <= y2.gety()) && (x2.gety() > y2.gety())) {
+					res->add(x1);
+					res->add(y2);
+					return true;
+				}
+				if ((x1.gety() > y1.gety()) && (x2.gety() < y2.gety())) {
+					res->add(x1);
+					res->add(x2);
+					return true;
+				}
+			}
+			else {
+				if (x1.getz() > x2.getz()) {
+					CGLPoint p = x1;
+					x1 = x2;
+					x2 = p;
+				}
+				if (y1.getz() > y2.getz()) {
+					CGLPoint p = y1;
+					y1 = y2;
+					y2 = p;
+				}
+				if (x1.getz() > y2.getz())
+					return false;
+				if (x2.getz() < y1.getz())
+					return false;
+				if ((x1.getz() <= y1.getz()) && (x2.getz() >= y2.getz())) {
+					res->add(y1);
+					res->add(y2);
+					return true;
+				}
+				if ((x1.getz() < y1.getz()) && (x2.getz() < y2.getz()) && (x2.getz() >= y1.getz())) {
+					res->add(y1);
+					res->add(x2);
+					return true;
+				}
+				if ((x1.getz() > y1.getz()) && (x1.getz() <= y2.getz()) && (x2.getz() > y2.getz())) {
+					res->add(x1);
+					res->add(y2);
+					return true;
+				}
+				if ((x1.getz() > y1.getz()) && (x2.getz() < y2.getz())) {
+					res->add(x1);
+					res->add(x2);
+					return true;
+				}
+			}
+	}
+	else if (y1 != y2) {
+		if (y1.getx() != y2.getx()) {
+			if (y1.getx() > y2.getx()) {
+				CGLPoint p = y1;
+				y1 = y2;
+				y2 = p;
+			}
+			if (x1.getx() <= y2.getx() && x1.getx() >= y1.getx())
+			{
+				res->add(x1);
+				return true;
+			}
+		}
+		else if (y1.gety() != y2.gety()) {
+			if (y1.gety() > y2.gety()) {
+				CGLPoint p = y1;
+				y1 = y2;
+				y2 = p;
+			}
+			if (x1.gety() <= y2.gety() && x1.gety() >= y1.gety())
+			{
+				res->add(x1);
 				return true;
 			}
 		}
 		else {
-			if (x1.getz() > y2.getz())
-				return false;
-			if (x2.getz() < y1.getz())
-				return false;
-			if ((x1.getz() <= y1.getz()) && (x2.getz() >= y2.getz())) {
-				res->add(y1);
-				res->add(y2);
-				return true;
+			if (y1.getz() > y2.getz()) {
+				CGLPoint p = y1;
+				y1 = y2;
+				y2 = p;
 			}
-			if ((x1.getz() < y1.getz()) && (x2.getz() < y2.getz()) && (x2.getz() >= y1.getz())) {
-				res->add(y1);
-				res->add(x2);
-				return true;
-			}
-			if ((x1.getz() > y1.getz()) && (x1.getz() <= y2.getz()) && (x2.getz() > y2.getz())) {
+			if (x1.getz() <= y2.getz() && x1.getz() >= y1.getz())
+			{
 				res->add(x1);
-				res->add(y2);
-				return true;
-			}
-			if ((x1.getz() > y1.getz()) && (x2.getz() < y2.getz())) {
-				res->add(x1);
-				res->add(x2);
 				return true;
 			}
 		}
+
+	}
+	else if(x1 != y1)
+		return false;
+	else {
+		res->add(x1);
+		return true;
+	}
 	return false;
 }
 
@@ -279,6 +404,80 @@ bool coplanar_tr_intersect(CGLTriangle t1, CGLTriangle t2, Result<CGLPoint>* res
 	return false;
 };
 
+bool out_of_plane_tr_intersect(CGLTriangle t1, CGLTriangle t2, CGLSegment* seg) {
+	CGLVector n2 = t2.get_plane().get_normal();
+	CGLVector u(t1.get_point(0), t1.get_point(1)), v(t1.get_point(0), t1.get_point(2));
+	CGLVector ap(t1.get_point(0), t2.get_point(0));
+	double coef11 = ap.dot(n2) * u.dot(n2) / (u.dot(n2)*u.dot(n2) + v.dot(n2)*v.dot(n2));
+	double coef12 = v.dot(n2);
+	double coef21 = ap.dot(n2) * v.dot(n2) / (u.dot(n2)*u.dot(n2) + v.dot(n2)*v.dot(n2));
+	double coef22 = -u.dot(n2);
+	double coef31 = 1 - coef11 - coef21;
+	double coef32 = -coef12 - coef22;
+	if ((coef12 == 0 && coef11 < 0) || (coef22 == 0 && coef21 < 0) || (coef32 == 0 && coef31 < 0))
+		return false;
+	double left[3] = { -INFINITY, -INFINITY, -INFINITY }, right[3] = { INFINITY, INFINITY, INFINITY };
+	double res_left = -INFINITY, res_right = INFINITY;
+	if (coef12 > 0)
+		left[0] = -coef11 / coef12;
+	else if(coef12 < 0)
+		right[0] = -coef11 / coef12;
+	if (coef22 > 0)
+		left[1] = -coef21 / coef22;
+	else if (coef22 < 0)
+		right[1] = -coef21 / coef22;
+	if (coef32 > 0)
+		left[2] = -coef31 / coef32;
+	else if (coef32 < 0)
+		right[2] = -coef31 / coef32;
+	res_left = left[0];
+	res_right = right[0];
+	if (res_left > right[1])
+		return false;
+	if (res_right < left[1])
+		return false;
+	if ((res_left <= left[1]) && (res_right >= right[1])) {
+		res_left = left[1];
+		res_right = right[1];
+	}
+	if ((res_left < left[1]) && (res_right < right[1]) && (res_right >= left[1])) {
+		res_left = left[1];
+	}
+	if ((res_left > left[1]) && (res_left <= right[1]) && (res_right > right[1])) {
+		res_right = right[1];
+	}
+	if (res_left > right[2])
+		return false;
+	if (res_right < left[2])
+		return false;
+	if ((res_left <= left[2]) && (res_right >= right[2])) {
+		res_left = left[2];
+		res_right = right[2];
+	}
+	if ((res_left < left[2]) && (res_right < right[2]) && (res_right >= left[2])) {
+		res_left = left[2];
+	}
+	if ((res_left > left[2]) && (res_left <= right[2]) && (res_right > right[2])) {
+		res_right = right[2];
+	}
+	CGLPoint A = t1.get_point(0);
+	double u1 = coef11 + res_left*coef12;
+	double u2 = coef11 + res_right*coef12;
+	double v1 = coef21 + res_left*coef22;
+	double v2 = coef21 + res_right*coef22;
+	if (res_left == res_right) {
+		*seg = CGLSegment(CGLPoint(A.getx() + u1*u.getx() + v1*v.getx(), A.gety() + u1*u.gety() + v1*v.gety(), A.getz() + u1*u.getz() + v1*v.getz()),
+			CGLPoint(A.getx() + u1*u.getx() + v1*v.getx(), A.gety() + u1*u.gety() + v1*v.gety(), A.getz() + u1*u.getz() + v1*v.getz()));
+		return true;
+	}
+	else {
+		*seg = CGLSegment(CGLPoint(A.getx() + u1*u.getx() + v1*v.getx(), A.gety() + u1*u.gety() + v1*v.gety(), A.getz() + u1*u.getz() + v1*v.getz()),
+			CGLPoint(A.getx() + u2*u.getx() + v2*v.getx(), A.gety() + u2*u.gety() + v2*v.gety(), A.getz() + u2*u.getz() + v2*v.getz()));
+		return true;
+	}
+	return false;
+}
+
 bool is_triangles_intersect(float* vertices1, float* vertices2, int index_v11, int index_v12, int index_v13,
 	int index_v21, int index_v22, int index_v23) {
 	CGLTriangle t1(vertices1, index_v11, index_v12, index_v13);
@@ -315,52 +514,21 @@ bool is_triangles_intersect(float* vertices1, float* vertices2, int index_v11, i
 	}
 	t1 = CGLTriangle(*a, *b, *c);
 	t2 = CGLTriangle(*p, *q, *r);
+	Result<CGLPoint>* res = &Result<CGLPoint>();
 	if (!t1.get_box().is_box_intersect(t2.get_box()))
 		return false;
 	if (!t1.get_plane().is_parallel(t2.get_plane())) {
-		CGLVector n2 = t2.get_plane().get_normal();
-		CGLVector u(t1.get_point(0), t1.get_point(1)), v(t1.get_point(0), t1.get_point(2));
-		CGLVector ap(t1.get_point(0), t2.get_point(0));
-		double coef11 = ap.dot(n2) * u.dot(n2) / (u.dot(n2)*u.dot(n2) + v.dot(n2)*v.dot(n2));
-		double coef12 = v.dot(n2);
-		double coef21 = ap.dot(n2) * v.dot(n2) / (u.dot(n2)*u.dot(n2) + v.dot(n2)*v.dot(n2));
-		double coef22 = -u.dot(n2);
-		double coef31 = 1 - coef11 - coef21;
-		double coef32 = -coef12 - coef22;
-		if ((coef12 == 0 && coef11 < 0) || (coef22 == 0 && coef21 < 0) || (coef32 == 0 && coef31 < 0))
-			return false;
-		double coef1 = INFINITY;
-		double coef2 = INFINITY;
-		double coef3 = INFINITY;
-		if (coef12 != 0)
-			coef1 = -coef11 / coef12;
-		else if (coef12 < 0)
-			coef1 = -INFINITY;
-		if (coef22 != 0)
-			coef2 = -coef21 / coef22;
-		else if (coef22 < 0)
-			coef2 = -INFINITY;
-		if (coef32 != 0)
-			coef3 = -coef31 / coef32;
-		else if (coef32 < 0)
-			coef3 = -INFINITY;
-		if (coef12 > 0 && coef22 > 0 && coef32 < 0)
-			if (fmin(coef1, coef2) > coef3) return false;
-		if (coef12 > 0 && coef22 < 0 && coef32 > 0)
-			if (fmin(coef1, coef3) > coef2) return false;
-		if (coef12 < 0 && coef22 > 0 && coef32 > 0)
-			if (fmin(coef2, coef3) > coef1) return false;
-		if (coef12 > 0 && coef22 < 0 && coef32 < 0)
-			if (fmax(coef2, coef3) < coef1) return false;
-		if (coef12 < 0 && coef22 > 0 && coef32 < 0)
-			if (fmax(coef1, coef3) < coef2) return false;
-		if (coef12 < 0 && coef22 < 0 && coef32 > 0)
-			if (fmax(coef1, coef2) < coef3) return false;
-		return true;
-	}
-	else {
-		return is_coplanar_tr_intersect(t1, t2);
-	};
+			CGLSegment seg1;
+			if (!out_of_plane_tr_intersect(t1, t2, &seg1))
+				return false;
+			CGLSegment seg2;
+			if (!out_of_plane_tr_intersect(t2, t1, &seg2))
+				return false;
+			return collinear_seg_intersect(seg1.getpoint0(), seg1.getpoint1(), seg2.getpoint0(), seg2.getpoint1(), res);
+		}
+		else {
+			return is_coplanar_tr_intersect(t1, t2);
+		}
 	return false;
 };
 
@@ -379,7 +547,7 @@ bool triangles_intersection(float* vertices1, float* vertices2, int index_v11, i
 		std::cout << "Triangle with indexes " << index_v21 << " " << index_v22 << " " << index_v23 << " is_degenerate\n";
 		return false;
 	}
-	CGLOrientation or ;
+	CGLOrientation or;
 	CGLPoint A = t1.get_point(0);
 	CGLPoint B = t1.get_point(1);
 	CGLPoint C = t1.get_point(2);
@@ -397,7 +565,7 @@ bool triangles_intersection(float* vertices1, float* vertices2, int index_v11, i
 		q = &R;
 		r = &Q;
 	}
-	if (or .coplanar_orientation(A, B, C) == NEGATIVE) {
+	if (or.coplanar_orientation(A, B, C) == NEGATIVE) {
 		b = &C;
 		c = &B;
 	}
@@ -406,104 +574,13 @@ bool triangles_intersection(float* vertices1, float* vertices2, int index_v11, i
 	if (!t1.get_box().is_box_intersect(t2.get_box()))
 		return false;
 	if (!t1.get_plane().is_parallel(t2.get_plane())) {
-		CGLVector n2 = t2.get_plane().get_normal();
-		CGLVector u(t1.get_point(0), t1.get_point(1)), v(t1.get_point(0), t1.get_point(2));
-		CGLVector ap(t1.get_point(0), t2.get_point(0));
-		double coef11 = ap.dot(n2) * u.dot(n2) / (u.dot(n2)*u.dot(n2) + v.dot(n2)*v.dot(n2));
-		double coef12 = v.dot(n2);
-		double coef21 = ap.dot(n2) * v.dot(n2) / (u.dot(n2)*u.dot(n2) + v.dot(n2)*v.dot(n2));
-		double coef22 = -u.dot(n2);
-		double coef31 = 1 - coef11 - coef21;
-		double coef32 = -coef12 - coef22;
-		double coef1 = INFINITY;
-		double coef2 = INFINITY;
-		double coef3 = INFINITY;
-		if (coef12 != 0)
-			coef1 = -coef11 / coef12;
-		else if (coef12 < 0)
-			coef1 = -INFINITY;
-		if (coef22 != 0)
-			coef2 = -coef21 / coef22;
-		else if (coef22 < 0)
-			coef2 = -INFINITY;
-		if (coef32 != 0)
-			coef3 = -coef31 / coef32;
-		else if (coef32 < 0)
-			coef3 = -INFINITY;
-		double left = -INFINITY;
-		double right =  INFINITY;
-		if (coef12 > 0 && coef22 > 0 && coef32 < 0)
-			if (fmin(coef1, coef2) > coef3) return false;
-			else {
-				if (fmin(coef1, coef2) == coef3)
-					left = right = coef3;
-				else {
-					left = fmin(coef1, coef2);
-					right = coef3;
-				}
-			}
-		if (coef12 > 0 && coef22 < 0 && coef32 > 0)
-			if (fmin(coef1, coef3) > coef2) return false;
-			else {
-				if (fmin(coef1, coef3) == coef2)
-					left = right = coef2;
-				else {
-					left = fmin(coef1, coef3);
-					right = coef2;
-				}
-			}
-		if (coef12 < 0 && coef22 > 0 && coef32 > 0)
-			if (fmin(coef2, coef3) > coef1) return false;
-			else {
-				if (fmin(coef2, coef3) == coef1)
-					left = right = coef1;
-				else {
-					left = fmin(coef2, coef3);
-					right = coef1;
-				}
-			}
-		if (coef12 > 0 && coef22 < 0 && coef32 < 0)
-			if (fmax(coef2, coef3) < coef1) return false;
-			else {
-				if (fmax(coef2, coef3) == coef1)
-					left = right = coef1;
-				else {
-					left = coef1;
-					right = fmax(coef2, coef3);
-				}
-			}
-		if (coef12 < 0 && coef22 > 0 && coef32 < 0)
-			if (fmax(coef1, coef3) < coef2) return false;
-			else {
-				if (fmax(coef1, coef3) == coef2)
-					left = right = coef2;
-				else {
-					left = coef2;
-					right = fmax(coef1, coef3);
-				}
-			}
-		if (coef12 < 0 && coef22 < 0 && coef32 > 0)
-			if (fmax(coef1, coef2) < coef3) return false;
-			else {
-				if (fmax(coef1, coef2) == coef3)
-					left = right = coef3;
-				else {
-					left = coef3;
-					right = fmax(coef1, coef2);
-				}
-			}
-			CGLPoint A = t1.get_point(0);
-			double u1 = coef11 + left*coef12;
-			double u2 = coef11 + right*coef12;
-			double v1 = coef21 + left*coef22;
-			double v2 = coef21 + right*coef22;
-			if(left == right)
-				res->add(CGLPoint(A.getx() + u1*u.getx() + v1*v.getx(), A.gety() + u1*u.gety() + v1*v.gety(), A.getz() + u1*u.getz() + v1*v.getz()));
-			else {
-				res->add(CGLPoint(A.getx() + u1*u.getx() + v1*v.getx(), A.gety() + u1*u.gety() + v1*v.gety(), A.getz() + u1*u.getz() + v1*v.getz()));
-				res->add(CGLPoint(A.getx() + u2*u.getx() + v2*v.getx(), A.gety() + u2*u.gety() + v2*v.gety(), A.getz() + u2*u.getz() + v2*v.getz()));
-			}
-			return true;
+		CGLSegment seg1;
+		if (!out_of_plane_tr_intersect(t1, t2, &seg1))
+			return false;
+		CGLSegment seg2;
+		if (!out_of_plane_tr_intersect(t2, t1, &seg2))
+			return false;
+		return collinear_seg_intersect(seg1.getpoint0(), seg1.getpoint1(), seg2.getpoint0(), seg2.getpoint1(), res);
 	}
 	else
 		return coplanar_tr_intersect(t1, t2, res);

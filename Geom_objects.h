@@ -3,7 +3,7 @@
 #include<iostream>
 #include<cmath>
 
-enum Orientation {ZERO, POSITIVE, NEGATIVE, COLLINEAR};
+enum Orientation {ZERO, POSITIVE, NEGATIVE};
 
 class CGLPoint {
 private:
@@ -47,6 +47,11 @@ public:
 			return true;
 		else return false;
 	}
+	friend const bool operator !=(CGLPoint &p1, CGLPoint &p2){
+		if ((p1.getx() != p2.getx()) || (p1.gety() != p2.gety()) || (p1.getz() != p2.getz()))
+			return true;
+		else return false;
+	}
 	friend const std::istream& operator >> (std::istream& in, CGLPoint& P) {
 	float x, y, z;
 	in >> x >> y >> z;
@@ -72,10 +77,10 @@ public:
 		double ry = R.gety();
 		double rz = R.getz();
 		Orientation oxy_pqr = orient_2d(px, py, qx, qy, rx, ry);
-		if (oxy_pqr != COLLINEAR)
+		if (oxy_pqr !=ZERO)
 			return oxy_pqr;
 		Orientation oyz_pqr = orient_2d(py, pz, qy, qz, ry, rz);
-		if (oyz_pqr != COLLINEAR)
+		if (oyz_pqr != ZERO)
 			return oyz_pqr;
 		return orient_2d(px, pz, qx, qz, rx, rz);
 	}
@@ -144,7 +149,7 @@ public:
 		:x(x), y(y), z(z) {}
 	~CGLVector() {}
 	bool is_parallel(CGLVector v) {
-		if (dot(v)*dot(v)/(quad()*v.quad()) == 1)
+		if (this->dot(v)*this->dot(v)/(this->quad()*v.quad()) == 1)
 			return true;
 		else
 			return false;
@@ -162,13 +167,13 @@ public:
 		return z;
 	}
 	CGLVector cross(CGLVector v) {
-		double i = y*v.z - z*v.y;
-		double j = -(x*v.z - z*v.x);
-		double k = x*v.y - y*v.x;
+		double i = this->y*v.getz() - this->z*v.gety();
+		double j = -(this->x*v.getz() - this->z*v.getx());
+		double k = this->x*v.gety() - this->y*v.getx();
 		return CGLVector(i, j, k);
 	}
 	double dot(CGLVector v) {
-		return x*v.x + y*v.y + z*v.z;
+		return x*v.getx() + y*v.gety() + z*v.getz();
 	}
 };
 
@@ -185,6 +190,12 @@ public:
 		return CGLBox(std::fmin(p0.getx(), p1.getx()), std::fmax(p0.getx(), p1.getx()),
 			std::fmin(p0.gety(), p1.gety()), std::fmax(p0.gety(), p1.gety()),
 			std::fmin(p0.getz(), p1.getz()), std::fmax(p0.getz(), p1.getz()));
+	}
+	CGLPoint getpoint0() {
+		return p0;
+	}
+	CGLPoint getpoint1() {
+		return p1;
 	}
 	friend const std::istream& operator >> (std::istream& in, CGLSegment &S) {
 		CGLPoint p0, p1;

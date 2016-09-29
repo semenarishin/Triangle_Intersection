@@ -28,9 +28,9 @@ public:
 		if(!has)
 			res.push_back(p);
 	}
-	void print() {
+	void print(std::ofstream &s) {
 		for (int i = 0; i < res.size(); i++)
-			std::cout << res[i];
+			s << res[i];
 	}
 };
 bool is_collinear_seg_intersect(CGLPoint x1, CGLPoint x2, CGLPoint y1, CGLPoint y2);
@@ -44,6 +44,8 @@ bool segments_intersect(CGLPoint x1, CGLPoint x2, CGLPoint y1, CGLPoint y2, Resu
 bool is_coplanar_tr_intersect(CGLTriangle t1, CGLTriangle t2);
 
 bool coplanar_tr_intersect(CGLTriangle t1, CGLTriangle t2, Result<CGLPoint>* r);
+
+bool out_of_plane_tr_intersect(CGLTriangle t1, CGLTriangle t2, CGLSegment* seg);
 
 bool is_triangles_intersect(float* vertices1, float* vertices2, int index_v11, int index_v12, int index_v13,
 	int index_v21, int index_v22, int index_v23);

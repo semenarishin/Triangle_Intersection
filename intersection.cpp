@@ -133,8 +133,18 @@ bool is_segments_intersect(CGLPoint x1, CGLPoint x2, CGLPoint y1, CGLPoint y2) {
 		else
 			return false;
 	}
-	double u = ((x1.getx() - x2.getx())*(y2.gety() - x2.gety()) - (x1.gety() - x2.gety())*(y2.getx() - x2.getx())) / ((x1.gety() - x2.gety())*(y1.getx() - y2.getx()) - (x1.getx() - x2.getx())*(y1.gety() - y2.gety()));
-	double v = ((y1.getx() - y2.getx()) * u + y2.getx() - x2.getx()) / (x1.getx() - x2.getx());
+	double u;
+	if ((x1.getx() - x2.getx() != 0) || (x1.gety() - x2.gety() != 0))
+		u = ((x1.getx() - x2.getx())*(y2.gety() - x2.gety()) - (x1.gety() - x2.gety())*(y2.getx() - x2.getx())) / ((x1.gety() - x2.gety())*(y1.getx() - y2.getx()) - (x1.getx() - x2.getx())*(y1.gety() - y2.gety()));
+	else
+		u = ((x1.getx() - x2.getx())*(y2.getz() - x2.getz()) - (x1.getz() - x2.getz())*(y2.getx() - x2.getx())) / ((x1.getz() - x2.getz())*(y1.getx() - y2.getx()) - (x1.getx() - x2.getx())*(y1.getz() - y2.getz()));
+	double v;
+	if (x1.getx() - x2.getx() != 0)
+		v = ((y1.getx() - y2.getx()) * u + y2.getx() - x2.getx()) / (x1.getx() - x2.getx());
+	else if (x1.gety() - x2.gety() != 0)
+		v = ((y1.gety() - y2.gety()) * u + y2.gety() - x2.gety()) / (x1.gety() - x2.gety());
+	else
+		v = ((y1.getz() - y2.getz()) * u + y2.getz() - x2.getz()) / (x1.getz() - x2.getz());
 	if (((x1.getz() - x2.getz())*v + x2.getz()) == ((y1.getz() - y2.getz())*u + y2.getz()))
 		if ((u <= 1.0) && (u >= 0.0) && (v <= 1.0) && (v >= 0.0))
 			return true;
@@ -313,6 +323,8 @@ bool segments_intersect(CGLPoint x1, CGLPoint x2, CGLPoint y1, CGLPoint y2, Resu
 		if (x.is_parallel(xy)) {
 			return collinear_seg_intersect(x1, x2, y1, y2, res);
 		}
+		else
+			return false;
 	}
 	double u;
 	if ((x1.getx() - x2.getx() != 0) || (x1.gety() - x2.gety() != 0))
@@ -351,7 +363,7 @@ bool is_coplanar_tr_intersect(CGLTriangle t1, CGLTriangle t2) {
 	CGLPoint *r = &t2.get_point(2);
 	for (int i = 0; i < 3; i++)
 		for (int j = 0; j < 3; j++)
-			if (is_segments_intersect(t1.get_point(i), t1.get_point(i + 1), t2.get_point(j), t1.get_point(j + 1)))
+			if (is_segments_intersect(t1.get_point(i), t1.get_point(i + 1), t2.get_point(j), t2.get_point(j + 1)))
 				return true;
 	
 	if (or.coplanar_orientation(*a, *b, *p) != NEGATIVE)
@@ -366,7 +378,7 @@ bool is_coplanar_tr_intersect(CGLTriangle t1, CGLTriangle t2) {
 };
 
 bool coplanar_tr_intersect(CGLTriangle t1, CGLTriangle t2, Result<CGLPoint>* res) {
-	CGLOrientation or ;
+	CGLOrientation or;
 	CGLPoint *a = &t1.get_point(0);
 	CGLPoint *b = &t1.get_point(1);
 	CGLPoint *c = &t1.get_point(2);
@@ -377,34 +389,37 @@ bool coplanar_tr_intersect(CGLTriangle t1, CGLTriangle t2, Result<CGLPoint>* res
 		for (int j = 0; j < 3; j++)
 			segments_intersect(t1.get_point(i), t1.get_point(i + 1), t2.get_point(j), t2.get_point(j + 1), res);
 
-		if (or .coplanar_orientation(*a, *b, *p) != NEGATIVE)
-			if (or .coplanar_orientation(*b, *c, *p) != NEGATIVE)
-				if (or .coplanar_orientation(*c, *a, *p) != NEGATIVE)
-					res->add(*p);
-		if (or .coplanar_orientation(*a, *b, *q) != NEGATIVE)
-			if (or .coplanar_orientation(*b, *c, *q) != NEGATIVE)
-				if (or .coplanar_orientation(*c, *a, *q) != NEGATIVE)
-					res->add(*q);
-		if (or .coplanar_orientation(*a, *b, *r) != NEGATIVE)
-			if (or .coplanar_orientation(*b, *c, *r) != NEGATIVE)
-				if (or .coplanar_orientation(*c, *a, *r) != NEGATIVE)
-					res->add(*r);
-		if (or .coplanar_orientation(*p, *q, *a) != NEGATIVE)
-			if (or .coplanar_orientation(*q, *r, *a) != NEGATIVE)
-				if (or .coplanar_orientation(*r, *p, *a) != NEGATIVE)
-					res->add(*a);
-		if (or .coplanar_orientation(*p, *q, *b) != NEGATIVE)
-			if (or .coplanar_orientation(*q, *r, *b) != NEGATIVE)
-				if (or .coplanar_orientation(*r, *p, *b) != NEGATIVE)
-					res->add(*b);
-		if (or .coplanar_orientation(*p, *q, *c) != NEGATIVE)
-			if (or .coplanar_orientation(*q, *r, *c) != NEGATIVE)
-				if (or .coplanar_orientation(*r, *p, *c) != NEGATIVE)				
-					res->add(*c);
-	return false;
+	if (or.coplanar_orientation(*a, *b, *p) != NEGATIVE)
+		if (or.coplanar_orientation(*b, *c, *p) != NEGATIVE)
+			if (or.coplanar_orientation(*c, *a, *p) != NEGATIVE)
+				res->add(*p);
+	if (or.coplanar_orientation(*a, *b, *q) != NEGATIVE)
+		if (or .coplanar_orientation(*b, *c, *q) != NEGATIVE)
+			if (or .coplanar_orientation(*c, *a, *q) != NEGATIVE)
+				res->add(*q);
+	if (or .coplanar_orientation(*a, *b, *r) != NEGATIVE)
+		if (or .coplanar_orientation(*b, *c, *r) != NEGATIVE)
+			if (or .coplanar_orientation(*c, *a, *r) != NEGATIVE)
+				res->add(*r);
+	if (or .coplanar_orientation(*p, *q, *a) != NEGATIVE)
+		if (or .coplanar_orientation(*q, *r, *a) != NEGATIVE)
+			if (or .coplanar_orientation(*r, *p, *a) != NEGATIVE)
+				res->add(*a);
+	if (or.coplanar_orientation(*p, *q, *b) != NEGATIVE)
+		if (or.coplanar_orientation(*q, *r, *b) != NEGATIVE)
+			if (or.coplanar_orientation(*r, *p, *b) != NEGATIVE)
+				res->add(*b);
+	if (or.coplanar_orientation(*p, *q, *c) != NEGATIVE)
+		if (or.coplanar_orientation(*q, *r, *c) != NEGATIVE)
+			if (or.coplanar_orientation(*r, *p, *c) != NEGATIVE)				
+				res->add(*c);
+	if (res->size() == 0)
+		return false;
+	else
+		return true;
 };
 
-bool out_of_plane_tr_intersect(CGLTriangle t1, CGLTriangle t2, CGLSegment* seg) {
+bool out_of_plane_trs_intersect(CGLTriangle t1, CGLTriangle t2, CGLSegment* seg) {
 	CGLVector n2 = t2.get_plane().get_normal();
 	CGLVector u(t1.get_point(0), t1.get_point(1)), v(t1.get_point(0), t1.get_point(2));
 	CGLVector ap(t1.get_point(0), t2.get_point(0));
@@ -475,7 +490,7 @@ bool out_of_plane_tr_intersect(CGLTriangle t1, CGLTriangle t2, CGLSegment* seg) 
 			CGLPoint(A.getx() + u2*u.getx() + v2*v.getx(), A.gety() + u2*u.gety() + v2*v.gety(), A.getz() + u2*u.getz() + v2*v.getz()));
 		return true;
 	}
-	return false;
+	return true;
 }
 
 bool is_triangles_intersect(float* vertices1, float* vertices2, int index_v11, int index_v12, int index_v13,
@@ -519,24 +534,34 @@ bool is_triangles_intersect(float* vertices1, float* vertices2, int index_v11, i
 		return false;
 	if (!t1.get_plane().is_parallel(t2.get_plane())) {
 			CGLSegment seg1;
-			if (!out_of_plane_tr_intersect(t1, t2, &seg1))
+			if (!out_of_plane_trs_intersect(t1, t2, &seg1))
 				return false;
 			CGLSegment seg2;
-			if (!out_of_plane_tr_intersect(t2, t1, &seg2))
+			if (!out_of_plane_trs_intersect(t2, t1, &seg2))
 				return false;
-			return collinear_seg_intersect(seg1.getpoint0(), seg1.getpoint1(), seg2.getpoint0(), seg2.getpoint1(), res);
+			return is_collinear_seg_intersect(seg1.getpoint0(), seg1.getpoint1(), seg2.getpoint0(), seg2.getpoint1());
 		}
 		else {
-			return is_coplanar_tr_intersect(t1, t2);
+			CGLPlane p1 = t1.get_plane();
+			CGLPlane p2 = CGLPlane();
+			if (!((t1.get_point(0) != t2.get_point(0)) && (t1.get_point(1) != t2.get_point(1)) && (t1.get_point(2) != t2.get_point(2))))
+				return coplanar_tr_intersect(t1, t2, res);
+			else
+				p2 = CGLPlane(t1.get_point(0), t2.get_point(0), t1.get_point(1));
+			if (p1.is_parallel(p2))
+				return is_coplanar_tr_intersect(t1, t2);
+			else
+				return false;
+			if (p1.is_parallel(p2))
+				return is_coplanar_tr_intersect(t1, t2);
+			else
+				return false;
 		}
 	return false;
 };
 
 bool triangles_intersection(float* vertices1, float* vertices2, int index_v11, int index_v12, int index_v13,
 	int index_v21, int index_v22, int index_v23, Result<CGLPoint>* res) {
-	/*if (!is_triangles_intersect(vertices1, vertices2, index_v11, index_v12, index_v13,
-		index_v21, index_v22, index_v23))
-		return false;*/
 	CGLTriangle t1(vertices1, index_v11, index_v12, index_v13);
 	CGLTriangle t2(vertices2, index_v21, index_v22, index_v23);
 	if (t1.is_degenerate()) {
@@ -575,14 +600,24 @@ bool triangles_intersection(float* vertices1, float* vertices2, int index_v11, i
 		return false;
 	if (!t1.get_plane().is_parallel(t2.get_plane())) {
 		CGLSegment seg1;
-		if (!out_of_plane_tr_intersect(t1, t2, &seg1))
+		if (!out_of_plane_trs_intersect(t1, t2, &seg1))
 			return false;
 		CGLSegment seg2;
-		if (!out_of_plane_tr_intersect(t2, t1, &seg2))
+		if (!out_of_plane_trs_intersect(t2, t1, &seg2))
 			return false;
 		return collinear_seg_intersect(seg1.getpoint0(), seg1.getpoint1(), seg2.getpoint0(), seg2.getpoint1(), res);
 	}
-	else
-		return coplanar_tr_intersect(t1, t2, res);
+	else {
+		CGLPlane p1 = t1.get_plane();
+		CGLPlane p2 = CGLPlane();
+		if (!((t1.get_point(0) != t2.get_point(0)) && (t1.get_point(1) != t2.get_point(1)) && (t1.get_point(2) != t2.get_point(2))))
+			return coplanar_tr_intersect(t1, t2, res);
+		else
+			p2 = CGLPlane(t1.get_point(0), t2.get_point(0), t1.get_point(1));
+		if (p1.is_parallel(p2))
+			return coplanar_tr_intersect(t1, t2, res);
+		else
+			return false;
+	}
 	return false;
 };

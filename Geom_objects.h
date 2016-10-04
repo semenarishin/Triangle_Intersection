@@ -60,7 +60,7 @@ public:
 	return in;
 	}
 	friend const std::ostream& operator << (std::ostream& out, CGLPoint& P) {
-	return out << P.x << ", " << P.y << ", " << P.z << std::endl;
+	return out << P.x << " " << P.y << " " << P.z << " ";
 	}
 };
 
@@ -149,7 +149,8 @@ public:
 		:x(x), y(y), z(z) {}
 	~CGLVector() {}
 	bool is_parallel(CGLVector v) {
-		if (this->dot(v)*this->dot(v)/(this->quad()*v.quad()) == 1)
+		double eps = 3.55271e-15;
+		if (1- (this->dot(v)*this->dot(v)/(this->quad()*v.quad())) < eps)
 			return true;
 		else
 			return false;
@@ -217,6 +218,7 @@ public:
 	double b;
 	double c;
 	double d;
+	CGLPlane() {}
 	CGLPlane(CGLPoint p1, CGLPoint p2, CGLPoint p3) {
 		CGLVector edge1(p1, p2);
 		CGLVector edge2(p1, p3);
@@ -224,9 +226,6 @@ public:
 		a = cr.getx();
 		b = cr.gety();
 		c = cr.getz();
-		double a1 = (p2.gety() - p1.gety())*(p3.getz() - p1.getz()) - (p3.gety() - p1.gety())*(p2.getz() - p1.getz());
-		double b1 = -(p2.getx() - p1.getx())*(p3.getz() - p1.getz()) + (p3.getx() - p1.getx())*(p2.getz() - p1.getz());
-		double c1 = (p2.getx() - p1.getx())*(p3.gety() - p1.gety()) - (p3.getx() - p1.getx())*(p2.gety() - p1.gety());
 		d = -p1.getx()*a + p1.gety()*b - p1.getz()*c;
 	}
 	~CGLPlane() {}
@@ -301,9 +300,10 @@ public:
 		return in;
 	}
 	friend const std::ostream& operator << (std::ostream& out, CGLTriangle &T) {
-		out << "V1: " << T.p1;
-		out << "V2: " << T.p2;
-		return out << "V3: " << T.p3;
+		out << T.get_point(0);
+		out << T.get_point(1);
+		out << T.get_point(2);
+		return out << std::endl;
 	}
 };
 #endif

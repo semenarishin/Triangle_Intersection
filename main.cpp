@@ -2,8 +2,11 @@
 #include "intersection.h"
 #include <iostream>
 #include <fstream>
+#include <cstdlib>
+#include <ctime>
 
 using namespace std;
+#define size 999
 
 int main(int argc, char** argv) {
 /* TESTS FOR COPLANAR TRIANGLES
@@ -43,12 +46,12 @@ int main(int argc, char** argv) {
 	//float f[] = { 0,0,0,0,1,0,1,0,0,0.1,0.1,0,0.9,0,1,0,0,1 }; //Intersection is a point(vertex in interior) 
 	//float f[] = { 0,0,0,0,1,0,1,0,0, 0,0,1,1,0,1,0,1,1 }; //No intersection(parallel plane)
 	//float f[] = { 0,0,0,0,1,0,1,0,0, 0,0,1,1,0,2,0,1,1 }; //No intersection (general)
-	float f[] = { 0, 0, 0 ,0, 1, 1,0, 1, 0,-1, -1, 0,0, -1, 0,-1, 0, 0 }; //No intersection(general) 
+	//float f[] = { 0, 0, 0 ,0, 1, 1,0, 1, 0,-1, -1, 0,0, -1, 0,-1, 0, 0 }; //No intersection(general) 
 	/*float f[] = { 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0,0, 0, 0, 0, 2, 0, 2, 0, 0, 0.25, 0.25, 0, 0, 0.25, 0, 0.25, 0, 0, 0.5, 0.5, 0, 0, 0.25, 0, 0.25, 0, 0,
 		0.25, 0.25, 0, 0.25, 0.3, 0, 0.3, 0.25, 0,0, 0, 0, 0, 1, 0, 0.1, 0.1, 0, 0, 0, 0, 0, 0.9, 0, 0.1, 0.1, 0,0, 0.1, 0, 0, 0.9, 0, 0.1, 0.1, 0,	0.25, 0.25, 0, 0, -1, 0, 1, -1, 0, 
 		0, -1, 0, 0, 0.25, 0, 1, -1, 0, -1, -1, 0, 0.25, 0.25, 0, 0.25, -1, 0,-1, -1, 0, 0.5, 0.5, 0, 2, -1, 0, 0, 0, 0, -0.25, 0, 0, 0, -0.25, 0, 0, 0, 0, -1, 1, 0, -1, -1, 0, 
 		0, 0.1, 0, -0.25, 0.1, 0, -0.25, -0.1, 0, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, 0.1, 0, 0, 0.9, 0, -1, 0, 0, 0, 0, 0, 0, 0.9, 0, -1, 0, 0, 0, -0.1, 0, 0, 0.9, 0, -1, 0, 0 }; */
-	int size = 18;
+/*	int size = 18;
 	int i = 9;
 	std::ofstream f1(argv[1], std::ios::app);
 	std::ofstream f2(argv[2], std::ios::app);
@@ -62,7 +65,45 @@ int main(int argc, char** argv) {
 		triangles_intersection(f, f, i, i + 3, i + 6, 0, 3, 6, r);
 		r->print(f2);
 		i += 9;
+	}*/
+	srand(static_cast <unsigned> (time(NULL)));
+	ofstream f1("input.txt");
+	ofstream f2("tupni.txt");
+	//float f[size * 9] = {1,0,0, 1,1,0,1,1,1, 1,0,0,1,1,0,1,1.00001,1}; Точность до 5го знака максимальная(float)
+	//float f[size * 9] = { 0.00001, 0,0, 0, 0.00001,0, 0,0,0, 0.00001,0,0, 1, -1, 0, 1, -1.5, 0 };
+	float f[size * 9];
+	for (int i = 0; i < size * 3; i++) {
+		f[3 * i] = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+		f[3 * i + 1] = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+		f[3 * i + 2] = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 	}
-	std::system("pause");
+	ofstream f3("massiv.txt");
+	for (int i = 0; i < size*9; i += 9) {
+		for (int j = i; j < i+9; j++)
+			f3 << f[j] << " ";
+		f3 << endl;
+	}
+	Result<CGLPoint> *r = &Result<CGLPoint>();
+	for (int i = 0; i < size*9; i += 9)
+		for (int j = i; j < size*9; j += 9) {
+			r = &Result<CGLPoint>();
+			if (triangles_intersection(f, f, i, i + 3, i + 6, j, j + 3, j + 6, r)) {
+				f1 << CGLTriangle(f, i, i + 3, i + 6);
+				f1 << CGLTriangle(f, j, j + 3, j + 6);
+				r->print(f1);
+				f1 << std::endl;
+			}
+		}
+	for (int i = 0; i < size * 9; i += 9)
+		for (int j = i; j < size * 9; j += 9) {
+			r = &Result<CGLPoint>();
+			if (triangles_intersection(f, f, j, j + 3, j + 6, i, i + 3, i + 6, r)) {
+				f2 << CGLTriangle(f, j, j + 3, j + 6);
+				f2 << CGLTriangle(f, i, i + 3, i + 6);
+				r->print(f2);
+				f2 << std::endl;
+			}
+		}
+	//std::system("pause");
 	return 0;
 }

@@ -1,17 +1,4 @@
 ﻿  main.cpp
-c:\users\work\documents\visual studio 2015\projects\triangle_intersection\triangle_intersection\main.cpp(72): warning C4838: conversion from 'double' to 'float' requires a narrowing conversion
-c:\users\work\documents\visual studio 2015\projects\triangle_intersection\triangle_intersection\main.cpp(72): warning C4305: 'initializing': truncation from 'double' to 'float'
-c:\users\work\documents\visual studio 2015\projects\triangle_intersection\triangle_intersection\intersection.h(35): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-  c:\users\work\documents\visual studio 2015\projects\triangle_intersection\triangle_intersection\intersection.h(34): note: while compiling class template member function 'void Result<CGLPoint>::print(std::ofstream &)'
-  c:\users\work\documents\visual studio 2015\projects\triangle_intersection\triangle_intersection\main.cpp(91): note: see reference to function template instantiation 'void Result<CGLPoint>::print(std::ofstream &)' being compiled
-  c:\users\work\documents\visual studio 2015\projects\triangle_intersection\triangle_intersection\main.cpp(84): note: see reference to class template instantiation 'Result<CGLPoint>' being compiled
-  intersection.cpp
-c:\users\work\documents\visual studio 2015\projects\triangle_intersection\triangle_intersection\intersection.h(32): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
-  c:\users\work\documents\visual studio 2015\projects\triangle_intersection\triangle_intersection\intersection.h(31): note: while compiling class template member function 'int Result<CGLPoint>::size(void)'
-  c:\users\work\documents\visual studio 2015\projects\triangle_intersection\triangle_intersection\intersection.cpp(416): note: see reference to function template instantiation 'int Result<CGLPoint>::size(void)' being compiled
-  c:\users\work\documents\visual studio 2015\projects\triangle_intersection\triangle_intersection\intersection.cpp(172): note: see reference to class template instantiation 'Result<CGLPoint>' being compiled
-  Generating Code...
-c:\users\work\documents\visual studio 2015\projects\triangle_intersection\triangle_intersection\geom_objects.h(277): warning C4715: 'CGLTriangle::get_point': not all control paths return a value
-c:\users\work\documents\visual studio 2015\projects\triangle_intersection\triangle_intersection\geom_objects.h(277): warning C4715: 'CGLTriangle::get_point': not all control paths return a value
+c:\users\work\documents\visual studio 2015\projects\triangle_intersection\triangle_intersection\geom_objects.h(284): warning C4715: 'CGLTriangle::get_point': not all control paths return a value
   Triangle_intersection.vcxproj -> C:\Users\Work\Documents\Visual Studio 2015\Projects\Triangle_intersection\x64\Debug\Triangle_intersection.exe
   Triangle_intersection.vcxproj -> C:\Users\Work\Documents\Visual Studio 2015\Projects\Triangle_intersection\x64\Debug\Triangle_intersection.pdb (Partial PDB)

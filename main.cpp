@@ -6,7 +6,7 @@
 #include <ctime>
 
 using namespace std;
-#define size 999
+#define size 2
 
 int main(int argc, char** argv) {
 /* TESTS FOR COPLANAR TRIANGLES
@@ -83,11 +83,12 @@ int main(int argc, char** argv) {
 			f3 << f[j] << " ";
 		f3 << endl;
 	}
+	CGLIntersection intersect;
 	Result<CGLPoint> *r = &Result<CGLPoint>();
 	for (int i = 0; i < size*9; i += 9)
 		for (int j = i; j < size*9; j += 9) {
 			r = &Result<CGLPoint>();
-			if (triangles_intersection(f, f, i, i + 3, i + 6, j, j + 3, j + 6, r)) {
+			if (intersect.triangles_intersection(f, f, i, i + 3, i + 6, j, j + 3, j + 6, r)) {
 				f1 << CGLTriangle(f, i, i + 3, i + 6);
 				f1 << CGLTriangle(f, j, j + 3, j + 6);
 				r->print(f1);
@@ -97,7 +98,7 @@ int main(int argc, char** argv) {
 	for (int i = 0; i < size * 9; i += 9)
 		for (int j = i; j < size * 9; j += 9) {
 			r = &Result<CGLPoint>();
-			if (triangles_intersection(f, f, j, j + 3, j + 6, i, i + 3, i + 6, r)) {
+			if (intersect.triangles_intersection(f, f, j, j + 3, j + 6, i, i + 3, i + 6, r)) {
 				f2 << CGLTriangle(f, j, j + 3, j + 6);
 				f2 << CGLTriangle(f, i, i + 3, i + 6);
 				r->print(f2);

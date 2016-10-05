@@ -12,13 +12,21 @@ private:
 	double z;
 public:
 	CGLPoint() {};
-	CGLPoint(float x, float y, float z)
-		:x(x), y(y), z(z) {}
-	CGLPoint(double x, double y, double z){
+	CGLPoint(float x, float y, float z, double eps){
 		this->x = x;
 		this->y = y;
 		this->z = z;
-		double eps = 3.55271e-15;
+		if (abs(x) < eps)
+			this->x = 0;
+		if (abs(y) < eps)
+			this->y = 0;
+		if (abs(z) < eps)
+			this->z = 0;
+	}
+	CGLPoint(double x, double y, double z, double eps){
+		this->x = x;
+		this->y = y;
+		this->z = z;
 		if (abs(x) < eps)
 			this->x = 0;
 		if (abs(y) < eps)
@@ -41,8 +49,7 @@ public:
 	double getz() {
 		return z;
 	}
-	bool is_same(CGLPoint p) {
-		double eps = 3.55271e-15;
+	bool is_same(CGLPoint p, double eps) {
 		if ((abs(x - p.getx()) < eps) && (abs(y - p.gety()) < eps) && (abs(z - p.getz()) < eps))
 			return true;
 		else return false;
@@ -56,7 +63,7 @@ public:
 	float x, y, z;
 	in >> x >> y >> z;
 	if (in)
-	P = CGLPoint(x, y, z);
+	P = CGLPoint(x, y, z, 3.55271e-15);
 	return in;
 	}
 	friend const std::ostream& operator << (std::ostream& out, CGLPoint& P) {
@@ -148,8 +155,7 @@ public:
 	CGLVector(double x, double y, double z)
 		:x(x), y(y), z(z) {}
 	~CGLVector() {}
-	bool is_parallel(CGLVector v) {
-		double eps = 3.55271e-15;
+	bool is_parallel(CGLVector v, double eps) {
 		if (1- (this->dot(v)*this->dot(v)/(this->quad()*v.quad())) < eps)
 			return true;
 		else
@@ -207,8 +213,9 @@ public:
 		return in;
 	}
 	friend const std::ostream& operator << (std::ostream& out, CGLSegment &S) {
-		out << "V1: " << S.p0;
-		return out << "V2: " << S.p1;
+		out << S.p0;
+		out << S.p1;
+		return out << std::endl;
 	}
 };
 
@@ -232,12 +239,12 @@ public:
 	CGLVector get_normal() {
 		return CGLVector(a, b, c);
 	}
-	bool is_parallel(CGLPlane p) {
+	bool is_parallel(CGLPlane p, double eps) {
 		CGLVector v(a, b, c);
-		return v.is_parallel(CGLVector(p.a, p.b, p.c));
+		return v.is_parallel(CGLVector(p.a, p.b, p.c), eps);
 	}
-	bool is_equal(CGLPlane p) {
-		if (is_parallel(p))
+	bool is_equal(CGLPlane p, double eps) {
+		if (is_parallel(p, eps))
 			if ((d == 0 && p.d != 0) || (d != 0 && p.d == 0))
 				return false;
 			else
